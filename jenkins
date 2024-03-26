@@ -1,0 +1,35 @@
+pipeline{
+ agent slave
+  stages{
+   stage('git checkout'){
+    steps{
+	 git'https://github.com/sriharisreenivas/git-repository.git'
+	}
+   }
+   stage('compile'){
+    steps{
+     sh'mvn compile'
+    }
+   }
+   stage('code review'){
+    steps{
+	 sh'pmd:pmd'
+	}
+   }
+   stage('unittest'){
+    steps{
+	 sh'mvn test'
+	}
+   }
+   stage('metriccheck'){
+    steps{
+	 sh'mvn cobertura:cobertura.report.format=xml'
+	}
+   }
+   stage('package'){
+    steps{
+	 sh'mvn package'
+	}
+   }
+  }
+ }
